@@ -17,7 +17,7 @@ const UserSchema = new Schema({
     phoneNumber: {
         type: String, 
         required: true,
-        default: "123"
+        default: "07** *** ***"
     },
     email: {
         type: String,
