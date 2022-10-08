@@ -14,7 +14,7 @@ router.get('/students/by-clasa', verifyProfesor, getStudentsByClasa)
 
 router.get(`/`, verifyAdmin, getAllUsers)
 
-router.get(`/:id`, verifyProfesorOrCurrentUser, getUser)
+router.get(`/:id`, verifyToken, getUser)
 
 router.put(`/:id`, verifyAdmin, updateUser)
 
