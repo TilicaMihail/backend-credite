@@ -12,9 +12,9 @@ router.get('/advanced', verifyToken, getAdvancedProjects)
 
 router.get('/volunteering', verifyToken, getVolunteeringProjects)
 
-router.get('/created-projects/:id', verifyProfesorOrCurrentUser, getCreatedProjects)
+router.get('/created-projects/:id', verifyToken, getCreatedProjects)
 
-router.get('/signed-up-projects/:id', verifyProfesorOrCurrentUser, getSignedUpProjects)
+router.get('/signed-up-projects/:id', verifyToken, getSignedUpProjects)
 
 router.get('/:id', verifyToken, getProjectById)
 

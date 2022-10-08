@@ -113,7 +113,7 @@ export const getCreatedProjects = async (req, res, next) => {
             author: req.params.id, 
             archived: req.query.includeArchived ? { $exists: true } : false,
             clase: { $in: req.query.clase },
-            profile: { $in: req.query.profile}
+            profile: { $in: req.query.profile }
         }).find().sort({ createdAt: -1 })
         res.status(200).json(projects)
     } catch (err) {
