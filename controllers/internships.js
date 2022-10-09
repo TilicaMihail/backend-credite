@@ -13,7 +13,7 @@ export const createInternship = async (req, res, next) => {
             maxNumberStudents: req.body.maxNumberStudents || 100000,
             price: req.body.price || 0,
             minNumberCredits: req.body.minNumberCredits || 0,
-            signUpdateLimit: new Date(req.body.finalDate || '01-01-3000')
+            signUpDateLimit: new Date(req.body.signUpDateLimit || '01-01-3000')
         })
         const internship = await newInternship.save()
         await User.findByIdAndUpdate(req.user.id, {
