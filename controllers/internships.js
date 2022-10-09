@@ -31,10 +31,11 @@ export const getAllInternships = async (req, res, next) => {
     try {
         const user = await User.findById(req.user.id)
         const array = user.createdInternshipsIds.concat(user.signedUpInternshipsIds)
+        const currentDate = new Date(user.role !== 'elev' && '01-01-2000' || new Date())
         const internships = await Internship.where({
             archived: false,
             _id: { $nin: user.role === 'elev' ? array : [] },
-
+            signUpDateLimit: { $gte: currentDate },
         }).find().sort({ createdAt: -1 })
         res.status(200).json(internships)
     } catch (err) {
