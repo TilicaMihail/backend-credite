@@ -3,10 +3,12 @@ import User from "../models/User.js"
 
 export const createInternship = async (req, res, next) => {
     try {
+        const user = await User.findById(req.user.id)
         const newInternship = new Internship({
             name: req.body.name,
             description: req.body.description,
             author: req.user.id,
+            authorName: user.firstName + ' ' + user.lastName,
             img: req.body.img || '',
             maxNumberStudents: req.body.maxNumberStudents || 100000,
             price: req.body.price || 0,
