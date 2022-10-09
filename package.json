@@ -18,13 +18,15 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
+    "ejs": "^3.1.8",
     "express": "^4.18.1",
     "express-query-boolean": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.5",
     "node-schedule": "^2.1.0",
     "nodemailer": "^6.8.0",
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.16",
+    "puppeteer": "^18.2.1"
   },
   "devDependencies": {
     "jest": "^28.1.3",

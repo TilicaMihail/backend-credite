@@ -3,6 +3,7 @@ import User from "../models/User.js"
 import schedule from 'node-schedule'
 import nodemailer from 'nodemailer'
 import { createError } from "../utils/error.js"
+import puppeteer from "puppeteer"
 
 export const createProject = async (req, res, next) => {
     try {
@@ -298,5 +299,20 @@ export const deleteAllProjects = async (req, res, next) => {
         res.status(200).json({ success: true})
     } catch (err) {
         next(err)
+    }
+}
+
+export const getFisaPrezentaProjects = async (req, res, next) => { 
+    try {
+        const project = await Project.findById(req.params.id)
+        const browser = await puppeteer.launch({ headless: true });
+        const page = await browser.newPage();
+        // const html = ejs.render('../views/fisa-prezenta.ejs', { project: project})
+        await page.setContent(project.name, {waitUntil: 'networkidle0'});
+        const pdf = await page.pdf({ format: 'A4' });
+        await browser.close();
+        res.status(200).set({ 'Content-Type': 'application/pdf', 'Content-Length': pdf.length }).send(pdf)
+    } catch (err) {
+        next(err);
     }
 }

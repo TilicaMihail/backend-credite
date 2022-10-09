@@ -1,5 +1,5 @@
 import express from 'express';
-import { approveProject, createProject, deleteAllProjects, deleteProject, getAdvancedProjects, getCreatedProjects, getProjectById, getProjects, getSignedUpProjects, getUnapprovedProjects, getVolunteeringProjects, gradeStudent, markStudentPresent, removeStudent, signUpToProject, updateProject } from '../controllers/projects.js';
+import { approveProject, createProject, deleteAllProjects, deleteProject, getAdvancedProjects, getCreatedProjects, getFisaPrezentaProjects, getProjectById, getProjects, getSignedUpProjects, getUnapprovedProjects, getVolunteeringProjects, gradeStudent, markStudentPresent, removeStudent, signUpToProject, updateProject } from '../controllers/projects.js';
 import { verifyAdmin, verifyToken, verifySignUpToProject, verifyAuthorProjectOrAdmin, verifyUserIsSignedUpToProject, verifyProfesorOrCurrentUser } from '../utils/verifyToken.js';
 
 const router = express.Router();
@@ -15,6 +15,8 @@ router.get('/volunteering', verifyToken, getVolunteeringProjects)
 router.get('/created-projects/:id', verifyToken, getCreatedProjects)
 
 router.get('/signed-up-projects/:id', verifyToken, getSignedUpProjects)
+
+router.get('/fisa-prezenta/:id', verifyAuthorProjectOrAdmin, getFisaPrezentaProjects)
 
 router.get('/:id', verifyToken, getProjectById)
 
