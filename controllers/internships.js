@@ -31,8 +31,8 @@ export const getAllInternships = async (req, res, next) => {
     try {
         const internships = await Internship.where({
             archived: false,
-        }).find()
-        res.status(200).json(internships).sort({ createdAt: -1 })
+        }).find().sort({ createdAt: -1 })
+        res.status(200).json(internships)
     } catch (err) {
         next(err)
     }
