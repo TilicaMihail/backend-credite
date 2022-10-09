@@ -75,9 +75,11 @@ export const getAdvancedProjects = async (req, res, next) => {
     try {
         const user = await User.findById(req.user.id)
         const array = user.createdProjectsIds.concat(user.signedUpProjectsIds)
+        const currentDate = new Date(user.role !== 'elev' && '01-01-2000' || new Date())
         const projects = await Project.where({ 
             advanced: true, 
             approved: true, 
+            signUpDateLimit: { $gte: currentDate },
             _id: { $nin: user.role === 'elev' ? array : [] },
             archived: req.query.includeArchived ? { $exists: true } : false,
             clase: { $in: req.query.clase },
@@ -93,9 +95,11 @@ export const getVolunteeringProjects = async (req, res, next) => {
     try {
         const user = await User.findById(req.user.id)
         const array = user.createdProjectsIds.concat(user.signedUpProjectsIds)
+        const currentDate = new Date(user.role !== 'elev' && '01-01-2000' || new Date())
         const projects = await Project.where({ 
             advanced: false, 
             approved: true, 
+            signUpDateLimit: { $gte: currentDate },
             _id: { $nin: user.role === 'elev' ? array : [] },
             archived: req.query.includeArchived ? { $exists: true } : false,
             clase: { $in: req.query.clase },
@@ -159,6 +163,7 @@ export const signUpToProject = async (req, res, next) => {
         const project = await Project.findByIdAndUpdate(req.params.id, {  
                 $set: {
                     [`students.${req.body.userId}`]: {
+                        signUpDate: new Date(),
                         firstName: user.firstName,
                         lastName: user.lastName,
                         _id: user._id,
