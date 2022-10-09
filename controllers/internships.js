@@ -1,10 +1,9 @@
 import Internship from "../models/Internship.js"
 import User from "../models/User.js"
-import { createError } from "../utils/error.js"
 
 export const createInternship = async (req, res, next) => {
     try {
-        const internship = new Internship({
+        const newInternship = new Internship({
             name: req.body.name,
             description: req.body.description,
             author: req.user.id,
@@ -14,12 +13,12 @@ export const createInternship = async (req, res, next) => {
             minNumberCredits: req.body.minNumberCredits || 0,
             signUpdateLimit: new Date(req.body.finalDate || '01-01-3000')
         })
-        const user = await User.findByIdAndUpdate(req.user.id, {
+        const internship = await newInternship.save()
+        await User.findByIdAndUpdate(req.user.id, {
             $addToSet: {
-                createdInternshipsIds: req.params.id
+                createdInternshipsIds: internship._id
             }
         })
-        await internship.save()
         res.status(200).json(internship)
     } catch (err) {
         next(err)
@@ -102,7 +101,6 @@ export const updateInternship = async (req, res, next) => {
             name: req.body.name,
             description: req.body.description,
             signUpDateLimit: typeof req.body.signUpDateLimit === String? new Date(signUpDateLimit) : undefined,
-            signUpDependsOn: req.body.signUpDependsOn,
             img: req.body.img,
             price: req.body.price,
             maxNumberStudents: req.body.maxNumberStudents,
