@@ -1,6 +1,7 @@
 import Project from "../models/Project.js"
 import User from "../models/User.js"
 import schedule from 'node-schedule'
+import nodemailer from 'nodemailer'
 import { createError } from "../utils/error.js"
 
 export const createProject = async (req, res, next) => {
@@ -198,6 +199,26 @@ export const gradeStudent = async (req, res, next) => {
             $set: {
                 totalCredite: user.totalCredite + req.body.credite - project.students[req.body.userId].credite
             }
+        })
+        const mailTransporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'sender mail',
+                pass: 'app password'
+                // daca folosesti gmail trebuie sa pui app password
+            }
+        })
+        const emailDetails = {
+            from: 'sender mail',
+            to: user.email,
+            subject: 'Mesaj nou aplicatia de credite',
+            text: `Ai primit ${req.body.credite} credite la proiectul ${project.name}.`
+        }
+        mailTransporter.sendMail(emailDetails, (err) => {
+            if(err)
+                console.log(err)
+            else 
+                console.log('email sent')
         })
         res.status(200).json(updatedProject)
     } catch (err) { 
