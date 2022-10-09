@@ -226,7 +226,7 @@ export const removeStudent = async (req, res, next) => {
                 signedUpProjectsIds: { $eq: req.params.id } 
             },
             $inc: { 
-                totalCredite: -project?.students[req.body.userId].credite
+                totalCredite: -1 * project?.students[req.body.userId].credite
             }
         }, { new: true })
         res.status(200).json(updatedProject)
