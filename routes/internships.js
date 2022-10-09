@@ -10,7 +10,7 @@ router.get('/:id', verifyToken, getInternshipById);
 
 router.get('/created-internships/:id', verifyProfesor, getCreatedInternships);
 
-router.get('/signed-up-internships/:id', verifyProfesorOrCurrentUser, getSignedUpInternships);
+router.get('/signed-up-internships/:id', verifyToken, getSignedUpInternships);
 
 router.post('/', verifyProfesor, createInternship);
 

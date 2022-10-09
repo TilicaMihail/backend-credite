@@ -52,3 +52,11 @@ export const logout = async (req, res, next) => {
     res.clearCookie('access_token', { });
     res.status(200).json({ success: true})
 }
+
+export const changePassword = async (req, res, next) => {
+    const salt = bcrypt.genSaltSync(10)
+    const hash = bcrypt.hashSync(req.body.password, salt)
+    await User.findByIdAndUpdate(req.user.id, { 
+        password: hash
+    })
+}

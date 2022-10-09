@@ -29,8 +29,12 @@ export const createInternship = async (req, res, next) => {
 
 export const getAllInternships = async (req, res, next) => {
     try {
+        const user = await User.findById(req.user.id)
+        const array = user.createdInternshipsIds.concat(user.signedUpInternshipsIds)
         const internships = await Internship.where({
             archived: false,
+            _id: { $nin: user.role === 'elev' ? array : [] },
+
         }).find().sort({ createdAt: -1 })
         res.status(200).json(internships)
     } catch (err) {
@@ -60,10 +64,9 @@ export const getCreatedInternships = async (req, res, next) => {
 
 export const getSignedUpInternships = async (req, res, next) => {
     try {
-        const user = await  User.findById(req.user.id)
+        const user = await  User.findById(req.params.id)
         const internships = await Internship.where({
-            archived: req.body.includeArchived ? { $exists: true } : false, 
-            _id: { $in: user.signedUpProjectsIds },
+            _id: { $in: user.signedUpInternshipsIds },
         }).find().sort({ createdAt: -1 })
         res.status(200).json(internships)
     } catch (err) {
