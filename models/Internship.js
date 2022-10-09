@@ -16,7 +16,6 @@ const InternshipSchema = new Schema({
     },
     description: {
         type: String,
-        required: true
     },
     archived: {
         type: Boolean,
