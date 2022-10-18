@@ -4,6 +4,7 @@ import schedule from 'node-schedule'
 import nodemailer from 'nodemailer'
 import { createError } from "../utils/error.js"
 import puppeteer from "puppeteer"
+import ejs from 'ejs'
 
 export const createProject = async (req, res, next) => {
     try {
@@ -307,8 +308,29 @@ export const getFisaPrezentaProjects = async (req, res, next) => {
         const project = await Project.findById(req.params.id)
         const browser = await puppeteer.launch({ headless: true });
         const page = await browser.newPage();
-        // const html = ejs.render('../views/fisa-prezenta.ejs', { project: project})
-        await page.setContent(project.name, {waitUntil: 'networkidle0'});
+        const html = ejs.render(`
+            <body>  
+                <style>
+                    body {  }
+                    h1 { padding: 20px; text-align: center;}
+                    h3 { padding: 2px;}
+                </style>  
+                <h1 >
+                    Fisa prezenta pentru '<%= project.name %>'
+                </h1>
+                <hr>
+                <div>       
+                    <%  for (var i = 0; i < Object.keys(project.students).length; i++) { %>
+                        <div>
+                        
+                        <h3> <%= Object.values(project.students)[i].firstName %>  <%= Object.values(project.students)[i].firstName %>   </h3>
+                        <hr>
+                        </div>
+                    <% } %>
+                </div>
+            </body>
+        `, { project: project})
+        await page.setContent(html, {waitUntil: 'networkidle0'});
         const pdf = await page.pdf({ format: 'A4' });
         await browser.close();
         res.status(200).set({ 'Content-Type': 'application/pdf', 'Content-Length': pdf.length }).send(pdf)
