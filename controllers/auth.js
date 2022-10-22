@@ -25,7 +25,7 @@ export const register = async (req, res, next) => {
         const user = await newUser.save()
         const token = jwt.sign({id: user._id, role: user.role}, process.env.JWT_KEY)
         const { password, role, ...userData} = user._doc
-        res.cookie("access_token", token, { httpOnly: true }).status(200).json({...userData})
+        res.cookie("access_token", token, { httpOnly: true, secure: true, sameSite: 'None' }).status(200).json({...userData})
     } catch (err) {
         next(err);
     }
@@ -42,7 +42,7 @@ export const login = async (req, res, next) => {
 
         const token = jwt.sign({id: user._id, role: user.role}, process.env.JWT_KEY)
         const { password, ...userData} = user._doc
-        res.cookie("access_token", token, { httpOnly: true }).status(200).json({...userData})
+        res.cookie("access_token", token, { httpOnly: true, secure: true, sameSite: 'None' }).status(200).json({...userData})
     } catch (err) {
         next(err);
     } 
