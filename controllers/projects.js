@@ -66,7 +66,8 @@ export const getProjectById = async (req, res, next) => {
 export const getUnapprovedProjects = async (req, res, next) => {
     try {
         const projects = await Project.where({ 
-            approved: false 
+            approved: false,
+            archived: false, 
         }).find().sort({ createdAt: -1 })
         res.status(200).json(projects)
     } catch (err) {

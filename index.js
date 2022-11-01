@@ -8,8 +8,10 @@ import internshipsRoute from './routes/internships.js'
 import statsRoute from './routes/stats.js'
 import cookieParser from 'cookie-parser'
 import boolParser from 'express-query-boolean'
+import schedule from 'node-schedule'
 // import { Agenda } from "agenda/es.js";
 import cors from 'cors'
+import { endOfYearJob, makeDbBackup } from './jobs/Jobs.js'
 const app = express(); 
 dotenv.config()
 
@@ -63,6 +65,16 @@ app.use((err, req, res, next) => {
 
 app.listen(8800, async () => {
     await connect();  
+    schedule.scheduleJob('*/5 * * * *', async () => {
+        // this job will make a db backup every 5 minutes
+        await makeDbBackup()
+    })  
+    schedule.scheduleJob('0 0 1 7 *', async () => {
+        // this job will execute every year on 1st of july ( pls double check the cron string, might be wrong ! IT IS IMPORTANT !)
+        // this job will: archive all projects and internships, increment clasa field for every user, reset totalCredite field to 0
+        await endOfYearJob()
+        console.log('end of year')
+    })
 })   
 
 export default app  
