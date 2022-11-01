@@ -5,3 +5,4 @@ Ce ar mai trebui facut:
     - make 'makeDbBackup' function
     - review cron jobs in index.js pls ( s-ar putea sa fie gresite cron string-urile )
     - take a look at endOfYear job in ./job/Jobs.js
+    - trebuie vazut daca elevii care au terminat clasa 12 trebuie stersi din app
