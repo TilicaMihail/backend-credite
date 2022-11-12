@@ -279,7 +279,7 @@ export const updateProject = async (req, res, next) => {
         const project = await Project.findByIdAndUpdate(req.params.id, {
             name: req.body.name,
             description: req.body.description,
-            signUpDateLimit: typeof req.body.signUpDateLimit === String? new Date(signUpDateLimit) : undefined,
+            signUpDateLimit: typeof req.body.signUpDateLimit === 'string' ? new Date(req.body.signUpDateLimit) : undefined,
             advanced: req.body.advanced,
             signUpDependsOn: req.body.signUpDependsOn,
             img: req.body.img,
